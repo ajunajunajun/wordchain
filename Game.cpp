@@ -1,4 +1,4 @@
-//ƒ\[ƒXƒR[ƒhì¬Ò:ŒÃ’r —Š‹H, ’¹ˆä ù—
+//ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ä½œæˆè€…:å¤æ±  é ¼ç¨€, ç„¡è¨˜åã¯é³¥äº• æ—‹ç†
 #include "DxLib.h"
 #include "Game.h"
 #include "Scene_Mgr.h"
@@ -11,7 +11,7 @@
 #include "stdlib.h"
 #include "math.h"
 
-//ƒOƒ[ƒoƒ‹•Ï”
+//ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°
 
 
 static int FpsTime[2]={0},Fpsc=0;
@@ -20,27 +20,27 @@ static double Fps=0.0;
 static int Font;
 static int Font2;
 
-static int Cr = GetColor(255,255,255);	//”’
-static int CrB = GetColor(0,0,0);	//•
+static int Cr = GetColor(255,255,255);	//ç™½
+static int CrB = GetColor(0,0,0);	//é»’
 
 
-static int PlayerHand[9]={0};//ƒvƒŒƒCƒ„[‚ÌèD(‰Šú’l-1)
-static int Deck[60]={0};//ƒ‰ƒ“ƒ_ƒ€‚È“Y‚¦š‚ğŠi”[
-static int DeckC;//ƒfƒbƒL‚Ìc‚è–‡”
-static int HandC;//ƒvƒŒƒCƒ„[‚ÌèD‚Ì–‡”
+static int PlayerHand[9]={0};//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ‰‹æœ­(åˆæœŸå€¤-1)
+static int Deck[60]={0};//ãƒ©ãƒ³ãƒ€ãƒ ãªæ·»ãˆå­—ã‚’æ ¼ç´
+static int DeckC;//ãƒ‡ãƒƒã‚­ã®æ®‹ã‚Šæšæ•°
+static int HandC;//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ‰‹æœ­ã®æšæ•°
 
-static int HRC; //èDƒŠƒZƒbƒg‰ñ”ƒJƒEƒ“ƒg•Ï”
+static int HRC; //æ‰‹æœ­ãƒªã‚»ãƒƒãƒˆå›æ•°ã‚«ã‚¦ãƒ³ãƒˆå¤‰æ•°
 
 static int Win[4],Defeat[4];	//Player1=Win[0],Defeat[0]
 				//AI1=Win[1],Defeat[1]
 				//AI2=Win[2],Defeat[2]
 				//AI3=Win[3],Defeat[3]
 
-static char CardCheck1[121]="‚ ‚¢‚¤‚¦‚¨‚©‚«‚­‚¯‚±‚³‚µ‚·‚¹‚»‚½‚¿‚Â‚Ä‚Æ‚È‚É‚Ê‚Ë‚Ì‚Í‚Ğ‚Ó‚Ö‚Ù‚Ü‚İ‚Ş‚ß‚à‚â‚ä‚æ‚ç‚è‚é‚ê‚ë‚í‚íƒAƒJƒTƒ^ƒiƒnƒ}ƒ„ƒ‰ŒÜŒÜ˜Z˜Zµµ";
-static char CardCheck2[51]="‚ª‚¬‚®‚°‚²‚´‚¶‚¸‚º‚¼‚¾‚À‚Ã‚Å‚Ç‚Î‚Ñ‚Ô‚×‚Ú‚Ï‚Ò‚Õ‚Ø‚Û";
-static char CardCheck3[51]="‚©‚«‚­‚¯‚±‚³‚µ‚·‚¹‚»‚½‚¿‚Â‚Ä‚Æ‚Í‚Ğ‚Ó‚Ö‚Ù‚Í‚Ğ‚Ó‚Ö‚Ù";
+static char CardCheck1[121]="ã‚ã„ã†ãˆãŠã‹ããã‘ã“ã•ã—ã™ã›ããŸã¡ã¤ã¦ã¨ãªã«ã¬ã­ã®ã¯ã²ãµã¸ã»ã¾ã¿ã‚€ã‚ã‚‚ã‚„ã‚†ã‚ˆã‚‰ã‚Šã‚‹ã‚Œã‚ã‚ã‚ã‚¢ã‚«ã‚µã‚¿ãƒŠãƒãƒãƒ¤ãƒ©äº”äº”å…­å…­ä¸ƒä¸ƒ";
+static char CardCheck2[51]="ãŒããã’ã”ã–ã˜ãšãœãã ã¢ã¥ã§ã©ã°ã³ã¶ã¹ã¼ã±ã´ã·ãºã½";
+static char CardCheck3[51]="ã‹ããã‘ã“ã•ã—ã™ã›ããŸã¡ã¤ã¦ã¨ã¯ã²ãµã¸ã»ã¯ã²ãµã¸ã»";
 
-//ƒfƒbƒL—p‚Ì“Y‚¦š
+//ãƒ‡ãƒƒã‚­ç”¨ã®æ·»ãˆå­—
 static int soezi[60]={0,1,2,3,4,5,6,7,8,9,10,
 		11,12,13,14,15,16,17,18,19,20,
 		21,22,23,24,25,26,27,28,29,30,
@@ -48,45 +48,45 @@ static int soezi[60]={0,1,2,3,4,5,6,7,8,9,10,
 		41,42,43,44,45,46,47,48,49,50,
 		51,52,53,54,55,56,57,58,59};
 
-static char Pick[64];	//curdcheck‚©‚çˆê•¶šæ‚èo‚·—p
+static char Pick[64];	//curdcheckã‹ã‚‰ä¸€æ–‡å­—å–ã‚Šå‡ºã™ç”¨
 
-static char Card[32]; //“ü—Í‚µ‚½•¶š‚ğŠi”[(‚Æ‚è‚ ‚¦‚¸30)
-static int CardSelect;	//èD‘I‘ğ
-static char TopCard[3];//”Õ–Ê‚Ì•¶šƒJ[ƒhB@
+static char Card[32]; //å…¥åŠ›ã—ãŸæ–‡å­—ã‚’æ ¼ç´(ã¨ã‚Šã‚ãˆãš30)
+static int CardSelect;	//æ‰‹æœ­é¸æŠ
+static char TopCard[3];//ç›¤é¢ã®æ–‡å­—ã‚«ãƒ¼ãƒ‰ã€‚ã€€
 
-static int DB_Check_Flag=0;//DB‚É•¶š—ñ‚ª‘¶İ‚·‚é‚©ƒtƒ‰ƒOB0‚ª‘¶İ‚µ‚È‚¢B1‚ª‘¶İ‚·‚éB
+static int DB_Check_Flag=0;//DBã«æ–‡å­—åˆ—ãŒå­˜åœ¨ã™ã‚‹ã‹ãƒ•ãƒ©ã‚°ã€‚0ãŒå­˜åœ¨ã—ãªã„ã€‚1ãŒå­˜åœ¨ã™ã‚‹ã€‚
 
-static int FirstTime=0;//ˆê‰ñ‚¾‚¯ŒÄ‚Ño‚·—p
+static int FirstTime=0;//ä¸€å›ã ã‘å‘¼ã³å‡ºã™ç”¨
 
-static int AI_Date1[4];//AIƒf[ƒ^ó‚¯“n‚µ—p”z—ñ
-static int AI_Date2[4];//0:‹­‚³,1:èD–‡”,2:ƒŠƒZƒbƒg‰ñ”,3:AIs“®’â~ƒtƒ‰ƒO
-static int AI_Date3[4];//0:0ã‚¢,1•’Ê,2‹­‚¢
-static int AI1_Hand[9];//AIèD
+static int AI_Date1[4];//AIãƒ‡ãƒ¼ã‚¿å—ã‘æ¸¡ã—ç”¨é…åˆ—
+static int AI_Date2[4];//0:å¼·ã•,1:æ‰‹æœ­æšæ•°,2:ãƒªã‚»ãƒƒãƒˆå›æ•°,3:AIè¡Œå‹•åœæ­¢ãƒ•ãƒ©ã‚°
+static int AI_Date3[4];//0:0å¼±ã„,1æ™®é€š,2å¼·ã„
+static int AI1_Hand[9];//AIæ‰‹æœ­
 static int AI2_Hand[9];//
 static int AI3_Hand[9];//
-static int Timer[3];//AI‚²‚Æ‚Ì‘Ò‹@ŠÔ
-static int TimerFlag[3];//AI‚²‚Æ‚Ì‘Ò‹@ŠÔ‚ğ‰Šú‰»‚·‚é‚©‚Ç‚¤‚©
-static char AI1_Word[32];//AIo—Í•¶š
+static int Timer[3];//AIã”ã¨ã®å¾…æ©Ÿæ™‚é–“
+static int TimerFlag[3];//AIã”ã¨ã®å¾…æ©Ÿæ™‚é–“ã‚’åˆæœŸåŒ–ã™ã‚‹ã‹ã©ã†ã‹
+static char AI1_Word[32];//AIå‡ºåŠ›æ–‡å­—
 static char AI2_Word[32];//
 static char AI3_Word[32];//
-static int AI_Select=0;//AI“ïˆÕ“xİ’èƒJƒEƒ“ƒ^
-static int InputWord;//•¶š“ü—Íƒnƒ“ƒhƒ‹
+static int AI_Select=0;//AIé›£æ˜“åº¦è¨­å®šã‚«ã‚¦ãƒ³ã‚¿
+static int InputWord;//æ–‡å­—å…¥åŠ›ãƒãƒ³ãƒ‰ãƒ«
 
-static int HandleMask;	//•`Ê—pÀ•z’c
+static int HandleMask;	//æå†™ç”¨åº§å¸ƒå›£
 static int HandleMask2;
 static int HandleMask3;
 
-static int handleword[132];	// ”Õ–Ê•¶š
-static int handlecard[68];	// ƒJ[ƒh
+static int handleword[132];	// ç›¤é¢æ–‡å­—
+static int handlecard[68];	// ã‚«ãƒ¼ãƒ‰
 
 char WordLog[200][32];
 static int Logcount = 0;
 
-static int BGM,BGM0,BGM1,BGM2,BGM3,BGM4,BGM5;//BGM—p•Ï”
+static int BGM,BGM0,BGM1,BGM2,BGM3,BGM4,BGM5;//BGMç”¨å¤‰æ•°
 extern int volumeX;
-static int randomBGM;  //—¬‚·ƒ‰ƒ“ƒ_ƒ€‚ÈBGM—p•Ï”
+static int randomBGM;  //æµã™ãƒ©ãƒ³ãƒ€ãƒ ãªBGMç”¨å¤‰æ•°
 
-static int mineshita = 0 ;	//“ïˆÕ“x
+static int mineshita = 0 ;	//é›£æ˜“åº¦
 static int mineshita2 = 0 ;
 static int mineshita3 = 0 ;
 static int AI_yowaihandle;
@@ -111,7 +111,7 @@ static int wave2=0;
 static int waveflag=0;
 static int wavecount=0;
 
-extern int syaberuflag[3];	// AI‚ªg—p‚µ‚½Œ¾—t—pƒtƒ‰ƒO
+extern int syaberuflag[3];	// AIãŒä½¿ç”¨ã—ãŸè¨€è‘‰ç”¨ãƒ•ãƒ©ã‚°
 
 void Game_Initialize(){
 
@@ -124,9 +124,9 @@ void Game_Initialize(){
 	mineshita = 0 ;
 	mineshita2 = 0 ;
 	mineshita3 = 0 ;
-//----------------------------------------------------------------------ŒÃ’r’Ç‰Á
-	Font = CreateFontToHandle( "‹›Îs‘", 120, 8, DX_FONTTYPE_ANTIALIASING );
-	Font2 = CreateFontToHandle( "ƒSƒVƒbƒN‘Ì", 50, 4, DX_FONTTYPE_ANTIALIASING );
+//----------------------------------------------------------------------å¤æ± è¿½åŠ 
+	Font = CreateFontToHandle( "é­šçŸ³è¡Œæ›¸", 120, 8, DX_FONTTYPE_ANTIALIASING );
+	Font2 = CreateFontToHandle( "ã‚´ã‚·ãƒƒã‚¯ä½“", 50, 4, DX_FONTTYPE_ANTIALIASING );
 	InputWord = MakeKeyInput( 30, FALSE, FALSE, FALSE );
 
         for ( int i = 0 ; i < 200 ; i++ )
@@ -172,12 +172,12 @@ void Game_Initialize(){
 	HandleMask2 = LoadGraph("images/mask2.png");
 	HandleMask3 = LoadGraph("images/mask3.png");
 
-	AI_yowaihandle = LoadGraph("“ïˆÕ“x/s_ã‚¢.png");
-	AI_hutuuhandle = LoadGraph("“ïˆÕ“x/s_•’Ê.png");
-	AI_tuyoihandle = LoadGraph("“ïˆÕ“x/s_‹­‚¢.png");
+	AI_yowaihandle = LoadGraph("é›£æ˜“åº¦/s_å¼±ã„.png");
+	AI_hutuuhandle = LoadGraph("é›£æ˜“åº¦/s_æ™®é€š.png");
+	AI_tuyoihandle = LoadGraph("é›£æ˜“åº¦/s_å¼·ã„.png");
 
 
-	// ”Õ–Ê‚Ì•¶š
+	// ç›¤é¢ã®æ–‡å­—
 	handleword[0] = LoadGraph("hiragana/a0.png");
 	handleword[1] = LoadGraph("hiragana/a1.png");
 	handleword[2] = LoadGraph("hiragana/a2.png");
@@ -311,77 +311,77 @@ void Game_Initialize(){
 	handleword[130]=LoadGraph("hiragana/wa1.png");
 	handleword[131]=LoadGraph("hiragana/wa2.png");
 
-	// ƒJ[ƒh
-	handlecard[0]=LoadGraph("card/ƒJ[ƒhE‚ .jpg");
-        handlecard[1]=LoadGraph("card/ƒJ[ƒhE‚¢.jpg");
-        handlecard[2]=LoadGraph("card/ƒJ[ƒhE‚¤.jpg");
-        handlecard[3]=LoadGraph("card/ƒJ[ƒhE‚¦.jpg");
-        handlecard[4]=LoadGraph("card/ƒJ[ƒhE‚¨.jpg");
-        handlecard[5]=LoadGraph("card/ƒJ[ƒhE‚©.jpg");
-        handlecard[6]=LoadGraph("card/ƒJ[ƒhE‚«.jpg");
-        handlecard[7]=LoadGraph("card/ƒJ[ƒhE‚­.jpg");
-        handlecard[8]=LoadGraph("card/ƒJ[ƒhE‚¯.jpg");
-        handlecard[9]=LoadGraph("card/ƒJ[ƒhE‚±.jpg");
-        handlecard[10]=LoadGraph("card/ƒJ[ƒhE‚³.jpg");
-        handlecard[11]=LoadGraph("card/ƒJ[ƒhE‚µ.jpg");
-        handlecard[12]=LoadGraph("card/ƒJ[ƒhE‚·.jpg");
-        handlecard[13]=LoadGraph("card/ƒJ[ƒhE‚¹.jpg");
-        handlecard[14]=LoadGraph("card/ƒJ[ƒhE‚».jpg");
-        handlecard[15]=LoadGraph("card/ƒJ[ƒhE‚½.jpg");
-        handlecard[16]=LoadGraph("card/ƒJ[ƒhE‚¿.jpg");
-        handlecard[17]=LoadGraph("card/ƒJ[ƒhE‚Â.jpg");
-        handlecard[18]=LoadGraph("card/ƒJ[ƒhE‚Ä.jpg");
-        handlecard[19]=LoadGraph("card/ƒJ[ƒhE‚Æ.jpg");
-        handlecard[20]=LoadGraph("card/ƒJ[ƒhE‚È.jpg");
-        handlecard[21]=LoadGraph("card/ƒJ[ƒhE‚É.jpg");
-        handlecard[22]=LoadGraph("card/ƒJ[ƒhE‚Ê.jpg");
-        handlecard[23]=LoadGraph("card/ƒJ[ƒhE‚Ë.jpg");
-        handlecard[24]=LoadGraph("card/ƒJ[ƒhE‚Ì.jpg");
-        handlecard[25]=LoadGraph("card/ƒJ[ƒhE‚Í.jpg");
-        handlecard[26]=LoadGraph("card/ƒJ[ƒhE‚Ğ.jpg");
-        handlecard[27]=LoadGraph("card/ƒJ[ƒhE‚Ó.jpg");
-        handlecard[28]=LoadGraph("card/ƒJ[ƒhE‚Ö.jpg");
-        handlecard[29]=LoadGraph("card/ƒJ[ƒhE‚Ù.jpg");
-        handlecard[30]=LoadGraph("card/ƒJ[ƒhE‚Ü.jpg");
-        handlecard[31]=LoadGraph("card/ƒJ[ƒhE‚İ.jpg");
-        handlecard[32]=LoadGraph("card/ƒJ[ƒhE‚Ş.jpg");
-        handlecard[33]=LoadGraph("card/ƒJ[ƒhE‚ß.jpg");
-        handlecard[34]=LoadGraph("card/ƒJ[ƒhE‚à.jpg");
-        handlecard[35]=LoadGraph("card/ƒJ[ƒhE‚â.jpg");
-        handlecard[36]=LoadGraph("card/ƒJ[ƒhE‚ä.jpg");
-        handlecard[37]=LoadGraph("card/ƒJ[ƒhE‚æ.jpg");
-        handlecard[38]=LoadGraph("card/ƒJ[ƒhE‚ç.jpg");
-        handlecard[39]=LoadGraph("card/ƒJ[ƒhE‚è.jpg");
-        handlecard[40]=LoadGraph("card/ƒJ[ƒhE‚é.jpg");
-        handlecard[41]=LoadGraph("card/ƒJ[ƒhE‚ê.jpg");
-        handlecard[42]=LoadGraph("card/ƒJ[ƒhE‚ë.jpg");
-        handlecard[43]=LoadGraph("card/ƒJ[ƒhE‚í.jpg");
-        handlecard[44]=LoadGraph("card/ƒJ[ƒhE‚í.jpg");
-        handlecard[45]=LoadGraph("card/ƒJ[ƒhE“ÁêE‚ s.jpg");
-        handlecard[46]=LoadGraph("card/ƒJ[ƒhE“ÁêE‚©s.jpg");
-        handlecard[47]=LoadGraph("card/ƒJ[ƒhE“ÁêE‚³s.jpg");
-        handlecard[48]=LoadGraph("card/ƒJ[ƒhE“ÁêE‚½s.jpg");
-        handlecard[49]=LoadGraph("card/ƒJ[ƒhE“ÁêE‚Ès.jpg");
-        handlecard[50]=LoadGraph("card/ƒJ[ƒhE“ÁêE‚Ís.jpg");
-        handlecard[51]=LoadGraph("card/ƒJ[ƒhE“ÁêE‚Üs.jpg");
-        handlecard[52]=LoadGraph("card/ƒJ[ƒhE“ÁêE‚âs.jpg");
-        handlecard[53]=LoadGraph("card/ƒJ[ƒhE“ÁêE‚çs.jpg");
-        handlecard[54]=LoadGraph("card/ƒJ[ƒhE“ÁêE5•¶š.jpg");
-        handlecard[55]=LoadGraph("card/ƒJ[ƒhE“ÁêE5•¶š.jpg");
-        handlecard[56]=LoadGraph("card/ƒJ[ƒhE“ÁêE6•¶š.jpg");
-        handlecard[57]=LoadGraph("card/ƒJ[ƒhE“ÁêE6•¶š.jpg");
-        handlecard[58]=LoadGraph("card/ƒJ[ƒhE“ÁêE7•¶šˆÈã.jpg");
-        handlecard[59]=LoadGraph("card/ƒJ[ƒhE“ÁêE7•¶šˆÈã.jpg");
-        handlecard[60]=LoadGraph("card/ƒJ[ƒhE”w–Ê.jpg");
-        handlecard[61]=LoadGraph("card/ƒJ[ƒhEA.jpg");
-        handlecard[62]=LoadGraph("card/ƒJ[ƒhEE.jpg");
-        handlecard[63]=LoadGraph("card/ƒJ[ƒhEG.jpg");
-        handlecard[64]=LoadGraph("card/ƒJ[ƒhEM.jpg");
-        handlecard[65]=LoadGraph("card/ƒJ[ƒhER.jpg");
-        handlecard[66]=LoadGraph("card/ƒJ[ƒhES.jpg");
-        handlecard[67]=LoadGraph("card/ƒJ[ƒhET.jpg");
+	// ã‚«ãƒ¼ãƒ‰
+	handlecard[0]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã‚.jpg");
+        handlecard[1]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã„.jpg");
+        handlecard[2]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã†.jpg");
+        handlecard[3]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ãˆ.jpg");
+        handlecard[4]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ãŠ.jpg");
+        handlecard[5]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã‹.jpg");
+        handlecard[6]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã.jpg");
+        handlecard[7]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã.jpg");
+        handlecard[8]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã‘.jpg");
+        handlecard[9]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã“.jpg");
+        handlecard[10]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã•.jpg");
+        handlecard[11]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã—.jpg");
+        handlecard[12]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã™.jpg");
+        handlecard[13]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã›.jpg");
+        handlecard[14]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã.jpg");
+        handlecard[15]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ãŸ.jpg");
+        handlecard[16]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã¡.jpg");
+        handlecard[17]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã¤.jpg");
+        handlecard[18]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã¦.jpg");
+        handlecard[19]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã¨.jpg");
+        handlecard[20]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ãª.jpg");
+        handlecard[21]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã«.jpg");
+        handlecard[22]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã¬.jpg");
+        handlecard[23]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã­.jpg");
+        handlecard[24]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã®.jpg");
+        handlecard[25]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã¯.jpg");
+        handlecard[26]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã².jpg");
+        handlecard[27]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ãµ.jpg");
+        handlecard[28]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã¸.jpg");
+        handlecard[29]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã».jpg");
+        handlecard[30]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã¾.jpg");
+        handlecard[31]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã¿.jpg");
+        handlecard[32]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã‚€.jpg");
+        handlecard[33]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã‚.jpg");
+        handlecard[34]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã‚‚.jpg");
+        handlecard[35]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã‚„.jpg");
+        handlecard[36]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã‚†.jpg");
+        handlecard[37]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã‚ˆ.jpg");
+        handlecard[38]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã‚‰.jpg");
+        handlecard[39]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã‚Š.jpg");
+        handlecard[40]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã‚‹.jpg");
+        handlecard[41]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã‚Œ.jpg");
+        handlecard[42]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã‚.jpg");
+        handlecard[43]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã‚.jpg");
+        handlecard[44]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ã‚.jpg");
+        handlecard[45]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ç‰¹æ®Šãƒ»ã‚è¡Œ.jpg");
+        handlecard[46]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ç‰¹æ®Šãƒ»ã‹è¡Œ.jpg");
+        handlecard[47]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ç‰¹æ®Šãƒ»ã•è¡Œ.jpg");
+        handlecard[48]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ç‰¹æ®Šãƒ»ãŸè¡Œ.jpg");
+        handlecard[49]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ç‰¹æ®Šãƒ»ãªè¡Œ.jpg");
+        handlecard[50]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ç‰¹æ®Šãƒ»ã¯è¡Œ.jpg");
+        handlecard[51]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ç‰¹æ®Šãƒ»ã¾è¡Œ.jpg");
+        handlecard[52]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ç‰¹æ®Šãƒ»ã‚„è¡Œ.jpg");
+        handlecard[53]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ç‰¹æ®Šãƒ»ã‚‰è¡Œ.jpg");
+        handlecard[54]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ç‰¹æ®Šãƒ»5æ–‡å­—.jpg");
+        handlecard[55]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ç‰¹æ®Šãƒ»5æ–‡å­—.jpg");
+        handlecard[56]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ç‰¹æ®Šãƒ»6æ–‡å­—.jpg");
+        handlecard[57]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ç‰¹æ®Šãƒ»6æ–‡å­—.jpg");
+        handlecard[58]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ç‰¹æ®Šãƒ»7æ–‡å­—ä»¥ä¸Š.jpg");
+        handlecard[59]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»ç‰¹æ®Šãƒ»7æ–‡å­—ä»¥ä¸Š.jpg");
+        handlecard[60]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»èƒŒé¢.jpg");
+        handlecard[61]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»A.jpg");
+        handlecard[62]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»E.jpg");
+        handlecard[63]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»G.jpg");
+        handlecard[64]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»M.jpg");
+        handlecard[65]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»R.jpg");
+        handlecard[66]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»S.jpg");
+        handlecard[67]=LoadGraph("card/ã‚«ãƒ¼ãƒ‰ãƒ»T.jpg");
 
-	//BGM‚ğ•Ï”‚ÉŠi”[
+	//BGMã‚’å¤‰æ•°ã«æ ¼ç´
 	BGM0=LoadMusicMem("sound/BGM2.mp3");
 	BGM1=LoadMusicMem("sound/BGM3.mp3");
 	BGM2=LoadMusicMem("sound/BGM4.mp3");
@@ -389,7 +389,7 @@ void Game_Initialize(){
 	BGM4=LoadMusicMem("sound/BGM6.mp3");
 	BGM5=LoadMusicMem("sound/BGM7.mp3");
 
-	//randomBGM = GetRand(5);   ‚Å‚Î‚Á‚­‚æ‚¤‚É‚±‚ß‚ñ‚Æ
+	//randomBGM = GetRand(5);   ã§ã°ã£ãã‚ˆã†ã«ã“ã‚ã‚“ã¨
 	randomBGM = 2;
 
 	if(randomBGM == 0){
@@ -416,13 +416,13 @@ void Game_Initialize(){
 
 
 
-	SEbuu=LoadSoundMem("Œø‰Ê‰¹/buu.mp3");
-	SEhukidasi=LoadSoundMem("Œø‰Ê‰¹/hukidasi.mp3");
-	SEsentaku=LoadSoundMem("Œø‰Ê‰¹/sentaku.mp3");
-	SEkakutei=LoadSoundMem("Œø‰Ê‰¹/kakutei.mp3");
-	SElose=LoadSoundMem("Œø‰Ê‰¹/lose.mp3");
-	SEwin=LoadSoundMem("Œø‰Ê‰¹/win.mp3");
-        SEgamestart=LoadSoundMem("Œø‰Ê‰¹/gamestart.wav");
+	SEbuu=LoadSoundMem("åŠ¹æœéŸ³/buu.mp3");
+	SEhukidasi=LoadSoundMem("åŠ¹æœéŸ³/hukidasi.mp3");
+	SEsentaku=LoadSoundMem("åŠ¹æœéŸ³/sentaku.mp3");
+	SEkakutei=LoadSoundMem("åŠ¹æœéŸ³/kakutei.mp3");
+	SElose=LoadSoundMem("åŠ¹æœéŸ³/lose.mp3");
+	SEwin=LoadSoundMem("åŠ¹æœéŸ³/win.mp3");
+        SEgamestart=LoadSoundMem("åŠ¹æœéŸ³/gamestart.wav");
 	//BGM
 	PlayMusicMem(BGM,DX_PLAYTYPE_LOOP);
 	SetVolumeMusic(volumeX);
@@ -434,7 +434,7 @@ void Game_Finalize(){
 	SetFontSize( 20 );
 	InitSoundMem() ;
 	InitGraph() ;
-//----------------------------------------------------------------------ŒÃ’r’Ç‰Á
+//----------------------------------------------------------------------å¤æ± è¿½åŠ 
 	DeleteFontToHandle(Font);
 	DeleteFontToHandle(Font2);
 	DeleteKeyInput(InputWord) ;
@@ -445,13 +445,13 @@ void Game_Update(){
 
 	int random;
 
-	if(FirstTime==0){//‰Šú€”õ
-		random_soezi();	//RDì¬
-		distribute();   //èD”z•z
+	if(FirstTime==0){//åˆæœŸæº–å‚™
+		random_soezi();	//å±±æœ­ä½œæˆ
+		distribute();   //æ‰‹æœ­é…å¸ƒ
 		FirstTime++;
 
-//----------------------------------------------------------------------ŒÃ’r’Ç‰Á
-		random = GetRand(88);//Å‰‚Ì”Õ–Ê‚ğƒ‰ƒ“ƒ_ƒ€‚Éİ’è
+//----------------------------------------------------------------------å¤æ± è¿½åŠ 
+		random = GetRand(88);//æœ€åˆã®ç›¤é¢ã‚’ãƒ©ãƒ³ãƒ€ãƒ ã«è¨­å®š
 		if ( random % 2 == 1 ) {
 			random -= 1;
 		}
@@ -459,7 +459,7 @@ void Game_Update(){
 		TopCard[1] = CardCheck1[random+1];
 	}
 
-	if ( FirstTime == 1 ) {//AI“ïˆÕ“xİ’è
+	if ( FirstTime == 1 ) {//AIé›£æ˜“åº¦è¨­å®š
 		if ( AI_Select <= 3 ) {
 
 			if (mineshita == 0){
@@ -522,10 +522,10 @@ void Game_Update(){
 			else
 				zahyo = 0;
 
-			DrawFormatString( 450, 0, Cr,"AI1 ` AI3 ‚Ì‹­‚³‚ğİ’è‚µ‚Ä‚­‚¾‚³‚¢");
-			DrawFormatString( 450, 20, Cr,"ˆÈ‰º‚Ì”š‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢");
-			DrawFormatString( 530, 100-zahyo, Cr,"1:ã‚¢ 2:•’Ê 3:‹­‚¢");
-			if ( Key_Get(KEY_INPUT_1) == 1 ){//1ƒL[‚ª‰Ÿ‚³‚ê‚½‚ç
+			DrawFormatString( 450, 0, Cr,"AI1 ï½ AI3 ã®å¼·ã•ã‚’è¨­å®šã—ã¦ãã ã•ã„");
+			DrawFormatString( 450, 20, Cr,"ä»¥ä¸‹ã®æ•°å­—ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„");
+			DrawFormatString( 530, 100-zahyo, Cr,"1:å¼±ã„ 2:æ™®é€š 3:å¼·ã„");
+			if ( Key_Get(KEY_INPUT_1) == 1 ){//1ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã‚‰
 		        	ChangeVolumeSoundMem( volumeX, SEkakutei ) ;
 				PlaySoundMem(SEkakutei,DX_PLAYTYPE_BACK);
 
@@ -544,7 +544,7 @@ void Game_Update(){
 				if ( AI_Select < 3 )
 					AI_Select += 1;
 			}
-			if ( Key_Get(KEY_INPUT_2) == 1 ){//2ƒL[‚ª‰Ÿ‚³‚ê‚½‚ç
+			if ( Key_Get(KEY_INPUT_2) == 1 ){//2ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã‚‰
 		        	ChangeVolumeSoundMem( volumeX, SEkakutei ) ;
 				PlaySoundMem(SEkakutei,DX_PLAYTYPE_BACK);
 				if ( AI_Select == 0 ) {
@@ -562,7 +562,7 @@ void Game_Update(){
 				if ( AI_Select < 3 )
 					AI_Select += 1;
 			}
-			if ( Key_Get(KEY_INPUT_3) == 1 ){//3ƒL[‚ª‰Ÿ‚³‚ê‚½‚ç
+			if ( Key_Get(KEY_INPUT_3) == 1 ){//3ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã‚‰
 		        	ChangeVolumeSoundMem( volumeX, SEkakutei ) ;
 				PlaySoundMem(SEkakutei,DX_PLAYTYPE_BACK);
 				if ( AI_Select == 0 ) {
@@ -583,7 +583,7 @@ void Game_Update(){
 		}
 	}
 	if ( FirstTime == 2 ) {
-		if ( Win[0] == 1 ) {//Ÿ”s•\¦
+		if ( Win[0] == 1 ) {//å‹æ•—è¡¨ç¤º
 			SetFontSize( 22 );
 			ClearDrawScreen() ;
 	         	DeleteSoundMem( BGM ) ;
@@ -591,10 +591,10 @@ void Game_Update(){
 			PlaySoundMem(SEwin,DX_PLAYTYPE_BACK);
 			DrawGraph(0,0,handlestage,TRUE);
 			DrawStringToHandle(360, 200,"YOU WIN!!",GetColor(255,255,255), Font);
-			DrawFormatString( 460, 350, Cr,"‰½‚©ƒL[‚ğ‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢");
-			DrawFormatString( 50, 50, Cr,"¡‰ñ‚ÌƒQ[ƒ€‚Åg—p‚µ‚½’PŒêˆê——");
+			DrawFormatString( 460, 350, Cr,"ä½•ã‹ã‚­ãƒ¼ã‚’æŠ¼ã—ã¦ãã ã•ã„");
+			DrawFormatString( 50, 50, Cr,"ä»Šå›ã®ã‚²ãƒ¼ãƒ ã§ä½¿ç”¨ã—ãŸå˜èªä¸€è¦§");
 			for ( int i = 0 ; i < Logcount ; i++ ) {
-					DrawFormatString( 72, 72+22*i, Cr, "%2dF%s", i+1, WordLog[i]);
+					DrawFormatString( 72, 72+22*i, Cr, "%2dï¼š%s", i+1, WordLog[i]);
 			}
 
 			ScreenFlip() ;
@@ -612,10 +612,10 @@ void Game_Update(){
 			DrawGraph(0,0,handlestage,TRUE);
 			DrawStringToHandle(360, 150," AI WIN!!",GetColor(255,255,255), Font);
 			DrawStringToHandle(360, 260,"YOU LOSE!!",GetColor(255,255,255), Font);
-			DrawFormatString( 460, 380, Cr,"‰½‚©ƒL[‚ğ‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢");
-			DrawFormatString( 50, 50, Cr,"¡‰ñ‚ÌƒQ[ƒ€‚Åg—p‚µ‚½’PŒêˆê——");
+			DrawFormatString( 460, 380, Cr,"ä½•ã‹ã‚­ãƒ¼ã‚’æŠ¼ã—ã¦ãã ã•ã„");
+			DrawFormatString( 50, 50, Cr,"ä»Šå›ã®ã‚²ãƒ¼ãƒ ã§ä½¿ç”¨ã—ãŸå˜èªä¸€è¦§");
 			for ( int i = 0 ; i < Logcount ; i++ ) {
-					DrawFormatString( 72, 72+22*i, Cr, "%2dF%s", i+1, WordLog[i]);
+					DrawFormatString( 72, 72+22*i, Cr, "%2dï¼š%s", i+1, WordLog[i]);
 			}
 
 
@@ -625,10 +625,10 @@ void Game_Update(){
 			WaitTimer(100);
 			SceneMgr_ChangeScene(eScene_Menu);
 		}
-		if( CheckKeyInput(InputWord) != 0 ){//“ü—ÍŠ®—¹‚µ‚½‚çDBˆ—‚ğ‚·‚é
+		if( CheckKeyInput(InputWord) != 0 ){//å…¥åŠ›å®Œäº†ã—ãŸã‚‰DBå‡¦ç†ã‚’ã™ã‚‹
 			GetKeyInputString(Card, InputWord);
-			WCO_DB_Check();	//DB’Tõ
-			hantei();	//”»’è
+			WCO_DB_Check();	//DBæ¢ç´¢
+			hantei();	//åˆ¤å®š
 			DeleteKeyInput(InputWord);
 			InputWord = MakeKeyInput( 30, FALSE, FALSE, FALSE );
 		}
@@ -636,10 +636,10 @@ void Game_Update(){
 
 //------------------------------------------------------------------------------
 
-	        if ( Key_Get(KEY_INPUT_SPACE)==1 ){//SPACEƒL[‚ª‰Ÿ‚³‚ê‚½‚ç
-			Hand_Reset();//èDƒŠƒZƒbƒgŠÖ”‚ğŒÄ‚Ô
+	        if ( Key_Get(KEY_INPUT_SPACE)==1 ){//SPACEã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã‚‰
+			Hand_Reset();//æ‰‹æœ­ãƒªã‚»ãƒƒãƒˆé–¢æ•°ã‚’å‘¼ã¶
 		}
-		if ( Key_Get(KEY_INPUT_1)==1 ){//1ƒL[‚ª‰Ÿ‚³‚ê‚½‚ç
+		if ( Key_Get(KEY_INPUT_1)==1 ){//1ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã‚‰
 	         	ChangeVolumeSoundMem( volumeX, SEsentaku ) ;
 			PlaySoundMem(SEsentaku,DX_PLAYTYPE_BACK);
 			CardSelect=0;
@@ -647,7 +647,7 @@ void Game_Update(){
 			InputWord = MakeKeyInput( 30, FALSE, FALSE, FALSE );
 			SetActiveKeyInput(InputWord);
 		}
-		if ( Key_Get(KEY_INPUT_2)==1 ){//2ƒL[‚ª‰Ÿ‚³‚ê‚½‚ç
+		if ( Key_Get(KEY_INPUT_2)==1 ){//2ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã‚‰
 	         	ChangeVolumeSoundMem( volumeX, SEsentaku ) ;
 			PlaySoundMem(SEsentaku,DX_PLAYTYPE_BACK);
 			CardSelect=1;
@@ -655,7 +655,7 @@ void Game_Update(){
 			InputWord = MakeKeyInput( 30, FALSE, FALSE, FALSE );
 			SetActiveKeyInput(InputWord);
 		}
-		if ( Key_Get(KEY_INPUT_3)==1 ){//3ƒL[‚ª‰Ÿ‚³‚ê‚½‚ç
+		if ( Key_Get(KEY_INPUT_3)==1 ){//3ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã‚‰
 	         	ChangeVolumeSoundMem( volumeX, SEsentaku ) ;
 			PlaySoundMem(SEsentaku,DX_PLAYTYPE_BACK);
 			CardSelect=2;
@@ -663,7 +663,7 @@ void Game_Update(){
 			InputWord = MakeKeyInput( 30, FALSE, FALSE, FALSE );
 			SetActiveKeyInput(InputWord);
 		}
-		if ( Key_Get(KEY_INPUT_4)==1 ){//4ƒL[‚ª‰Ÿ‚³‚ê‚½‚ç
+		if ( Key_Get(KEY_INPUT_4)==1 ){//4ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã‚‰
 	         	ChangeVolumeSoundMem( volumeX, SEsentaku ) ;
 			PlaySoundMem(SEsentaku,DX_PLAYTYPE_BACK);
 			CardSelect=3;
@@ -671,7 +671,7 @@ void Game_Update(){
 			InputWord = MakeKeyInput( 30, FALSE, FALSE, FALSE );
 			SetActiveKeyInput(InputWord);
 		}
-		if ( Key_Get(KEY_INPUT_5)==1 ){//5ƒL[‚ª‰Ÿ‚³‚ê‚½‚ç
+		if ( Key_Get(KEY_INPUT_5)==1 ){//5ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã‚‰
 	         	ChangeVolumeSoundMem( volumeX, SEsentaku ) ;
 			PlaySoundMem(SEsentaku,DX_PLAYTYPE_BACK);
 			CardSelect=4;
@@ -679,7 +679,7 @@ void Game_Update(){
 			InputWord = MakeKeyInput( 30, FALSE, FALSE, FALSE );
 			SetActiveKeyInput(InputWord);
 		}
-		if ( Key_Get(KEY_INPUT_6)==1 ){//6ƒL[‚ª‰Ÿ‚³‚ê‚½‚ç
+		if ( Key_Get(KEY_INPUT_6)==1 ){//6ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã‚‰
 	         	ChangeVolumeSoundMem( volumeX, SEsentaku ) ;
 			PlaySoundMem(SEsentaku,DX_PLAYTYPE_BACK);
 			CardSelect=5;
@@ -687,7 +687,7 @@ void Game_Update(){
 			InputWord = MakeKeyInput( 30, FALSE, FALSE, FALSE );
 			SetActiveKeyInput(InputWord);
 		}
-		if ( Key_Get(KEY_INPUT_7)==1 ){//7ƒL[‚ª‰Ÿ‚³‚ê‚½‚ç
+		if ( Key_Get(KEY_INPUT_7)==1 ){//7ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã‚‰
 	         	ChangeVolumeSoundMem( volumeX, SEsentaku ) ;
 			PlaySoundMem(SEsentaku,DX_PLAYTYPE_BACK);
 			CardSelect=6;
@@ -695,7 +695,7 @@ void Game_Update(){
 			InputWord = MakeKeyInput( 30, FALSE, FALSE, FALSE );
 			SetActiveKeyInput(InputWord);
 		}
-		if ( Key_Get(KEY_INPUT_8)==1 ){//8ƒL[‚ª‰Ÿ‚³‚ê‚½‚ç
+		if ( Key_Get(KEY_INPUT_8)==1 ){//8ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã‚‰
 	         	ChangeVolumeSoundMem( volumeX, SEsentaku ) ;
 			PlaySoundMem(SEsentaku,DX_PLAYTYPE_BACK);
 			CardSelect=7;
@@ -707,14 +707,14 @@ void Game_Update(){
 		DeckC = WCO_AI(AI_Date1, AI_Date2, AI_Date3, AI1_Hand, AI2_Hand, AI3_Hand, Timer, TimerFlag, TopCard,
 			AI1_Word, AI2_Word, AI3_Word, CardCheck1, CardCheck2, CardCheck3, Deck, DeckC, HandC);
 
-		//Ÿ”s”»’è
+		//å‹æ•—åˆ¤å®š
 		Deck_Def();
 		Hand_Win();
 	}
 }
 
 void Game_Draw(){
-//---3Dƒ‚ƒfƒ‹---
+//---3Dãƒ¢ãƒ‡ãƒ«---
 
 	static int AttachIndex1,AttachIndex2,AttachIndex3,AttachIndex4,AttachIndex5,AttachIndex6,AttachIndex7,AttachIndex8,AttachIndex9;
 	static int ModelHandle[ 3 ] ;
@@ -725,21 +725,21 @@ void Game_Draw(){
 	static float PlayTime4,PlayTime5,PlayTime6,PlayTime7,PlayTime8,PlayTime9;
 	static float VRotate, HRotate, TRotate ;
 
-	// ‰Šúİ’è
+	// åˆæœŸè¨­å®š
 	if ( OneTime == 0 ) {
 
-		// ƒJƒƒ‰‚Ì‰ñ“]’l‚ğ‰Šú‰»
+		// ã‚«ãƒ¡ãƒ©ã®å›è»¢å€¤ã‚’åˆæœŸåŒ–
 		VRotate = 0.0f ;
 		HRotate = 0.0f ;
 		TRotate = 0.0f ;
 
-		// ‚R‚cƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ
-		ModelHandle[ 0 ] = MV1LoadModel( "dat/—Ñ/3Dƒ‚ƒfƒ‹13.pmx" ) ;
+		// ï¼“ï¼¤ãƒ¢ãƒ‡ãƒ«ã®èª­ã¿è¾¼ã¿
+		ModelHandle[ 0 ] = MV1LoadModel( "dat/æ—/3Dãƒ¢ãƒ‡ãƒ«13.pmx" ) ;
 		ModelHandle[ 1 ] = MV1DuplicateModel( ModelHandle[ 0 ] ) ;
 		ModelHandle[ 2 ] = MV1DuplicateModel( ModelHandle[ 0 ] ) ;
 		StageHandle = MV1LoadModel( "dat/heastconp/heastconp.pmx" ) ;
 
-		// w’èˆÊ’u‚Éƒ‚ƒfƒ‹‚ğ”z’u
+		// æŒ‡å®šä½ç½®ã«ãƒ¢ãƒ‡ãƒ«ã‚’é…ç½®
 		MV1SetPosition( ModelHandle[ 0 ], VGet( 0.0f, 40.0f, 0.0f ) ) ;
 		MV1SetPosition( ModelHandle[ 1 ], VGet(  -37.0f, 40.0f, -20.0f ) ) ;
 		MV1SetPosition( ModelHandle[ 2 ], VGet(  37.0f, 40.0f, -20.0f ) ) ;
@@ -749,27 +749,27 @@ void Game_Draw(){
 		MV1SetRotationXYZ( ModelHandle[ 1 ], VGet( 0.0f, 5.2f , 0.0f ) );
 		MV1SetRotationXYZ( ModelHandle[ 2 ], VGet( 0.0f, 1.0f , 0.0f ) );
 
-		// ƒJƒƒ‰‚ÌˆÊ’u‚Æ‰ñ“]’l‚ğƒZƒbƒgAƒJƒƒ‰‚ÌˆÊ’u‚ÍŒ´“_
+		// ã‚«ãƒ¡ãƒ©ã®ä½ç½®ã¨å›è»¢å€¤ã‚’ã‚»ãƒƒãƒˆã€ã‚«ãƒ¡ãƒ©ã®ä½ç½®ã¯åŸç‚¹
 		SetCameraPositionAndAngle( VGet(  xx, yy, zz ), VRotate, HRotate, TRotate) ;
 
-		//‰œs0.1`1000‚Ü‚Å‚ğƒJƒƒ‰‚Ì•`‰æ”ÍˆÍ‚Æ‚·‚é
+		//å¥¥è¡Œ0.1ï½1000ã¾ã§ã‚’ã‚«ãƒ¡ãƒ©ã®æç”»ç¯„å›²ã¨ã™ã‚‹
 		SetCameraNearFar( 0.1f, 1000.0f ) ;
 
 		MV1DetachAnim( ModelHandle[1], AttachIndex1 ) ;
 		MV1DetachAnim( ModelHandle[0], AttachIndex2 ) ;
 		MV1DetachAnim( ModelHandle[2], AttachIndex3 ) ;
 
-		// ‚R‚cƒ‚ƒfƒ‹‚Ì1”Ô–Ú‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚ğƒAƒ^ƒbƒ`‚·‚é
+		// ï¼“ï¼¤ãƒ¢ãƒ‡ãƒ«ã®1ç•ªç›®ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’ã‚¢ã‚¿ãƒƒãƒã™ã‚‹
 		AttachIndex1 = MV1AttachAnim( ModelHandle[1], 0, -1, FALSE ) ;
 		AttachIndex2 = MV1AttachAnim( ModelHandle[0], 0, -1, FALSE ) ;
 		AttachIndex3 = MV1AttachAnim( ModelHandle[2], 0, -1, FALSE ) ;
 
-		// ƒAƒ^ƒbƒ`‚µ‚½ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì‘Ä¶ŠÔ‚ğæ“¾‚·‚é
+		// ã‚¢ã‚¿ãƒƒãƒã—ãŸã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®ç·å†ç”Ÿæ™‚é–“ã‚’å–å¾—ã™ã‚‹
 		TotalTime = MV1GetAttachAnimTotalTime( ModelHandle[1], AttachIndex1 ) ;
                 TotalTime2 = MV1GetAttachAnimTotalTime( ModelHandle[0], AttachIndex2 ) ;
 		TotalTime3 = MV1GetAttachAnimTotalTime( ModelHandle[2], AttachIndex3 ) ;
 
-		// Ä¶ŠÔ‚Ì‰Šú‰»
+		// å†ç”Ÿæ™‚é–“ã®åˆæœŸåŒ–
 		PlayTime = 0.0f ;
 		PlayTime2 = 0.0f ;
 		PlayTime3 = 0.0f ;
@@ -799,7 +799,7 @@ void Game_Draw(){
 	}
 
 
-        // Ä¶ŠÔ‚ğƒZƒbƒg‚·‚é
+        // å†ç”Ÿæ™‚é–“ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
 	if(Win[1] != 1 && Defeat[1] != 1){
         	MV1SetAttachAnimTime( ModelHandle[1], AttachIndex1, PlayTime ) ;
 	}
@@ -820,7 +820,7 @@ void Game_Draw(){
 		MV1SetAttachAnimTime( ModelHandle[2], AttachIndex3, PlayTime6 ) ;
         }
 
-	// Ä¶ŠÔ‚ği‚ß‚é
+	// å†ç”Ÿæ™‚é–“ã‚’é€²ã‚ã‚‹
     	PlayTime2 += 0.506f + AI_Date2[0] ;
     	PlayTime  += 0.506f + AI_Date1[0] ;
     	PlayTime3 += 0.506f + AI_Date3[0] ;
@@ -828,7 +828,7 @@ void Game_Draw(){
     	PlayTime5 += 0.506f  ;
     	PlayTime6 += 0.506f  ;
 
-        // Ä¶ŠÔ‚ªƒAƒjƒ[ƒVƒ‡ƒ“‚Ì‘Ä¶ŠÔ‚É’B‚µ‚½‚çÄ¶ŠÔ‚ğ‚O‚É–ß‚·
+        // å†ç”Ÿæ™‚é–“ãŒã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®ç·å†ç”Ÿæ™‚é–“ã«é”ã—ãŸã‚‰å†ç”Ÿæ™‚é–“ã‚’ï¼ã«æˆ»ã™
         if( PlayTime >= TotalTime ){
             PlayTime = 0.0f ;
         }
@@ -850,8 +850,8 @@ void Game_Draw(){
 
 
 
-        // ‚R‚cƒ‚ƒfƒ‹‚Ì•`‰æ
-	// ‚R‚cƒ‚ƒfƒ‹‚ÌƒXƒP[ƒ‹
+        // ï¼“ï¼¤ãƒ¢ãƒ‡ãƒ«ã®æç”»
+	// ï¼“ï¼¤ãƒ¢ãƒ‡ãƒ«ã®ã‚¹ã‚±ãƒ¼ãƒ«
     	MV1SetScale( StageHandle, VGet( 3.0f, 3.0f, 3.0f ) ) ;
 
     	MV1DrawModel( ModelHandle[ 0 ] ) ;
@@ -859,11 +859,11 @@ void Game_Draw(){
     	MV1DrawModel( ModelHandle[ 2 ] ) ;
 	MV1DrawModel( StageHandle);
 
-//---3Dƒ‚ƒfƒ‹---
+//---3Dãƒ¢ãƒ‡ãƒ«---
 
 	int i;
 
-	// ƒQ[ƒ€ƒXƒ^[ƒg‰æ–Ê
+	// ã‚²ãƒ¼ãƒ ã‚¹ã‚¿ãƒ¼ãƒˆç”»é¢
 	if ( AI_Select == 3 && waveflag==0 ) {
 		wave+=8;
 		if( wave >= 100 ) {
@@ -884,81 +884,81 @@ void Game_Draw(){
 		PlaySoundMem(SEgamestart,DX_PLAYTYPE_BACK);
 	}
 	if ( AI_Select == 3 ) {
-		DrawGraph( 320, 400+wave, handlecard[63], FALSE);// •`Ê
-		DrawGraph( 390, 400+wave, handlecard[61], FALSE);// •`Ê
-		DrawGraph( 460, 400+wave, handlecard[64], FALSE);// •`Ê
-		DrawGraph( 530, 400+wave, handlecard[62], FALSE);// •`Ê
-		DrawGraph( 600, 400+wave, handlecard[66], FALSE);// •`Ê
-		DrawGraph( 670, 400+wave, handlecard[67], FALSE);// •`Ê
-		DrawGraph( 740, 400+wave, handlecard[61], FALSE);// •`Ê
-		DrawGraph( 810, 400+wave, handlecard[65], FALSE);// •`Ê
-		DrawGraph( 880, 400+wave, handlecard[67], FALSE);// •`Ê
+		DrawGraph( 320, 400+wave, handlecard[63], FALSE);// æå†™
+		DrawGraph( 390, 400+wave, handlecard[61], FALSE);// æå†™
+		DrawGraph( 460, 400+wave, handlecard[64], FALSE);// æå†™
+		DrawGraph( 530, 400+wave, handlecard[62], FALSE);// æå†™
+		DrawGraph( 600, 400+wave, handlecard[66], FALSE);// æå†™
+		DrawGraph( 670, 400+wave, handlecard[67], FALSE);// æå†™
+		DrawGraph( 740, 400+wave, handlecard[61], FALSE);// æå†™
+		DrawGraph( 810, 400+wave, handlecard[65], FALSE);// æå†™
+		DrawGraph( 880, 400+wave, handlecard[67], FALSE);// æå†™
 	}
 
 	if ( FirstTime == 2 ) {
 		if ( wave2 != -1000 ){
 			wave2-=20;
-			DrawGraph( 320, 400+wave2, handlecard[63], FALSE);// •`Ê
-			DrawGraph( 390, 400+wave2, handlecard[61], FALSE);// •`Ê
-			DrawGraph( 460, 400+wave2, handlecard[64], FALSE);// •`Ê
-			DrawGraph( 530, 400+wave2, handlecard[62], FALSE);// •`Ê
-			DrawGraph( 600, 400+wave2, handlecard[66], FALSE);// •`Ê
-			DrawGraph( 670, 400+wave2, handlecard[67], FALSE);// •`Ê
-			DrawGraph( 740, 400+wave2, handlecard[61], FALSE);// •`Ê
-			DrawGraph( 810, 400+wave2, handlecard[65], FALSE);// •`Ê
-			DrawGraph( 880, 400+wave2, handlecard[67], FALSE);// •`Ê
+			DrawGraph( 320, 400+wave2, handlecard[63], FALSE);// æå†™
+			DrawGraph( 390, 400+wave2, handlecard[61], FALSE);// æå†™
+			DrawGraph( 460, 400+wave2, handlecard[64], FALSE);// æå†™
+			DrawGraph( 530, 400+wave2, handlecard[62], FALSE);// æå†™
+			DrawGraph( 600, 400+wave2, handlecard[66], FALSE);// æå†™
+			DrawGraph( 670, 400+wave2, handlecard[67], FALSE);// æå†™
+			DrawGraph( 740, 400+wave2, handlecard[61], FALSE);// æå†™
+			DrawGraph( 810, 400+wave2, handlecard[65], FALSE);// æå†™
+			DrawGraph( 880, 400+wave2, handlecard[67], FALSE);// æå†™
 	        }
 
-		//î•ñ•\¦
+		//æƒ…å ±è¡¨ç¤º
 		DrawGraph(1070,620,HandleMask,TRUE);	// PL
 		DrawGraph(540,365,HandleMask,TRUE);     // AI2
 		DrawGraph(100,410,HandleMask,TRUE);     // AI1
 		DrawGraph(980,410,HandleMask,TRUE);     // AI3
-		DrawGraph(390,448,HandleMask3,TRUE);	// PLƒZƒŠƒt
+		DrawGraph(390,448,HandleMask3,TRUE);	// PLã‚»ãƒªãƒ•
 
-		DrawFormatString( 1080, 630, CrB,"Player\nèD–‡”:%d–‡", HandC);
-		DrawFormatString( 1080, 673, CrB,"ƒŠƒZƒbƒgc”:%d‰ñ", 3 - HRC);
+		DrawFormatString( 1080, 630, CrB,"Player\næ‰‹æœ­æšæ•°:%dæš", HandC);
+		DrawFormatString( 1080, 673, CrB,"ãƒªã‚»ãƒƒãƒˆæ®‹æ•°:%då›", 3 - HRC);
 
-//----------------------------------------------------------------------ŒÃ’r’Ç‰Á
+//----------------------------------------------------------------------å¤æ± è¿½åŠ 
                	SetFontSize( 50 ) ;
-		DrawKeyInputString(400, 450, InputWord);//ƒvƒŒƒCƒ„[•¶š“ü—Í
+		DrawKeyInputString(400, 450, InputWord);//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼æ–‡å­—å…¥åŠ›
 		SetFontSize( 20 ) ;
 
 
 		if ( AI_Date1[0] == 0 ) {
-			DrawFormatString( 110, 420, CrB,"ã‚¢AI1\nèD–‡”:%d–‡", AI_Date1[1]);
+			DrawFormatString( 110, 420, CrB,"å¼±ã„AI1\næ‰‹æœ­æšæ•°:%dæš", AI_Date1[1]);
 		}
 		else if ( AI_Date1[0] == 1 ) {
-			DrawFormatString( 110, 420, CrB,"•’ÊAI1\nèD–‡”:%d–‡", AI_Date1[1]);
+			DrawFormatString( 110, 420, CrB,"æ™®é€šAI1\næ‰‹æœ­æšæ•°:%dæš", AI_Date1[1]);
 		}
 		else {
-			DrawFormatString( 110, 420, CrB,"‹­‚¢AI1\nèD–‡”:%d–‡", AI_Date1[1]);
+			DrawFormatString( 110, 420, CrB,"å¼·ã„AI1\næ‰‹æœ­æšæ•°:%dæš", AI_Date1[1]);
 		}
-		DrawFormatString( 110, 463, CrB,"ƒŠƒZƒbƒgc”:%d‰ñ", 3 - AI_Date1[2]);
+		DrawFormatString( 110, 463, CrB,"ãƒªã‚»ãƒƒãƒˆæ®‹æ•°:%då›", 3 - AI_Date1[2]);
 		if ( AI_Date2[0] == 0 ) {
-			DrawFormatString( 550, 375, CrB,"ã‚¢AI2\nèD–‡”:%d–‡", AI_Date2[1]);
+			DrawFormatString( 550, 375, CrB,"å¼±ã„AI2\næ‰‹æœ­æšæ•°:%dæš", AI_Date2[1]);
 		}
 		else if ( AI_Date2[0] == 1 ) {
-			DrawFormatString( 550, 375, CrB,"•’ÊAI2\nèD–‡”:%d–‡", AI_Date2[1]);
+			DrawFormatString( 550, 375, CrB,"æ™®é€šAI2\næ‰‹æœ­æšæ•°:%dæš", AI_Date2[1]);
 		}
 		else {
-			DrawFormatString( 550, 375, CrB,"‹­‚¢AI2\nèD–‡”:%d–‡", AI_Date2[1]);
+			DrawFormatString( 550, 375, CrB,"å¼·ã„AI2\næ‰‹æœ­æšæ•°:%dæš", AI_Date2[1]);
 		}
-		DrawFormatString( 550, 418, CrB,"ƒŠƒZƒbƒgc”:%d‰ñ", 3 - AI_Date2[2]);
+		DrawFormatString( 550, 418, CrB,"ãƒªã‚»ãƒƒãƒˆæ®‹æ•°:%då›", 3 - AI_Date2[2]);
 		if ( AI_Date3[0] == 0 ) {
-			DrawFormatString( 990, 420, CrB,"ã‚¢AI3\nèD–‡”:%d–‡", AI_Date3[1]);
+			DrawFormatString( 990, 420, CrB,"å¼±ã„AI3\næ‰‹æœ­æšæ•°:%dæš", AI_Date3[1]);
 		}
 		else if ( AI_Date3[0] == 1 ) {
-			DrawFormatString( 990, 420, CrB,"•’ÊAI3\nèD–‡”:%d–‡", AI_Date3[1]);
+			DrawFormatString( 990, 420, CrB,"æ™®é€šAI3\næ‰‹æœ­æšæ•°:%dæš", AI_Date3[1]);
 		}
 		else {
-			DrawFormatString( 990, 420, CrB,"‹­‚¢AI3\nèD–‡”:%d–‡", AI_Date3[1]);
+			DrawFormatString( 990, 420, CrB,"å¼·ã„AI3\næ‰‹æœ­æšæ•°:%dæš", AI_Date3[1]);
 		}
-		DrawFormatString( 990, 463, CrB,"ƒŠƒZƒbƒgc”:%d‰ñ", 3 - AI_Date3[2]);
+		DrawFormatString( 990, 463, CrB,"ãƒªã‚»ãƒƒãƒˆæ®‹æ•°:%då›", 3 - AI_Date3[2]);
 //------------------------------------------------------------------------------
 
-		//î•ñ•\¦
-		DrawFormatString( 0, 10, Cr,"ƒfƒbƒL–‡”:%d", DeckC);
+		//æƒ…å ±è¡¨ç¤º
+		DrawFormatString( 0, 10, Cr,"ãƒ‡ãƒƒã‚­æšæ•°:%d", DeckC);
 
 		static int jikan=0;
 	        static int updatetime=0;
@@ -968,7 +968,7 @@ void Game_Draw(){
 		if(updatetime==0){
 			jikan = GetNowCount();
 
-			// kakudo‚ğ0->1->2->1->0->1~~‚Ìƒ‹[ƒv
+			// kakudoã‚’0->1->2->1->0->1~~ã®ãƒ«ãƒ¼ãƒ—
 			if ( waai == 0 ){
 				kakudo++;
 				if ( kakudo == 2 )
@@ -986,31 +986,31 @@ void Game_Draw(){
 		}
 
 		static int pyon ;
-		// èD•\¦
+		// æ‰‹æœ­è¡¨ç¤º
 		for ( int i = 0 ; i < HandC ; i++ ){
 			if ( i == CardSelect )
 				pyon = -40;
 			else
 				pyon = 0;
 
-			DrawGraph((8-HandC)*50 + 50+i*120, 550+pyon, handlecard[PlayerHand[i]], FALSE);// •`Ê
+			DrawGraph((8-HandC)*50 + 50+i*120, 550+pyon, handlecard[PlayerHand[i]], FALSE);// æå†™
 		}
 
-		// AIèD–‡”•\¦
+		// AIæ‰‹æœ­æšæ•°è¡¨ç¤º
 		for ( int i = 0 ; AI1_Hand[i] != -1 ; i++ )
-			DrawExtendGraph( 100+i*20, 370, 120+i*20, 410, handlecard[60], FALSE);// •`Ê
+			DrawExtendGraph( 100+i*20, 370, 120+i*20, 410, handlecard[60], FALSE);// æå†™
 
 		for ( int i = 0 ; AI2_Hand[i] != -1 ; i++ )
-			DrawExtendGraph( 540+i*20, 330, 560+i*20, 370, handlecard[60], FALSE);// •`Ê
+			DrawExtendGraph( 540+i*20, 330, 560+i*20, 370, handlecard[60], FALSE);// æå†™
 
 		for ( int i = 0 ; AI3_Hand[i] != -1 ; i++ )
-			DrawExtendGraph( 980+i*20, 370, 1000+i*20, 410, handlecard[60], FALSE);// •`Ê
+			DrawExtendGraph( 980+i*20, 370, 1000+i*20, 410, handlecard[60], FALSE);// æå†™
 
 		static int syaberujikan[3] = { 0 };
 	        static int syaberuupdatetime[3] = { 0 };
 
 
-		// AIŒ¾—t•\¦
+		// AIè¨€è‘‰è¡¨ç¤º
 		for ( int syabe = 0 ; syabe < 3 ; syabe++ ) {
 			if ( syaberuflag[syabe] == 1 ) {
 				if(syaberuupdatetime[syabe] == 0){
@@ -1041,22 +1041,22 @@ void Game_Draw(){
 			}
 		}
 		if ( syaberuflag[0] == 1 ) {
-			DrawGraph(0,40,HandleMask2,TRUE);	// AI1ƒZƒŠƒt
+			DrawGraph(0,40,HandleMask2,TRUE);	// AI1ã‚»ãƒªãƒ•
 			DrawFormatStringToHandle( 10, 44, Cr, Font2, "%s", AI1_Word);
 		}
 		if ( syaberuflag[1] == 1 ) {
-			DrawGraph(390,160,HandleMask3,TRUE);	// AI2ƒZƒŠƒt
+			DrawGraph(390,160,HandleMask3,TRUE);	// AI2ã‚»ãƒªãƒ•
 			DrawFormatStringToHandle( 400, 164, Cr, Font2, "%s", AI2_Word);
 		}
 		if ( syaberuflag[2] == 1 ) {
-			DrawGraph(740,40,HandleMask2,TRUE);	// AI3ƒZƒŠƒt
+			DrawGraph(740,40,HandleMask2,TRUE);	// AI3ã‚»ãƒªãƒ•
 			DrawFormatStringToHandle( 750, 44, Cr, Font2, "%s", AI3_Word);
 		}
 
-		// ”Õ–Ê‚Ì•¶š•\¦
+		// ç›¤é¢ã®æ–‡å­—è¡¨ç¤º
 	        for ( int ajun = 0 ; ajun < 44 ; ajun++ ) {
 			if ( TopCard[0] == CardCheck1[ajun*2] && TopCard[1] == CardCheck1[ajun*2+1] ) {
-				DrawGraph(435,-130,handleword[ajun*3+kakudo],TRUE);// •`Ê
+				DrawGraph(435,-130,handleword[ajun*3+kakudo],TRUE);// æå†™
 				break;
 			}
 		}
@@ -1067,47 +1067,47 @@ void Game_Draw(){
 	}
 }
 
-void random_soezi(void)//ƒfƒbƒL‚Éƒ‰ƒ“ƒ_ƒ€‚É“Y‚¦š‚ğ“ü‚ê‚éŠÖ” ì¬F—Ñ ‘ñŠC
+void random_soezi(void)//ãƒ‡ãƒƒã‚­ã«ãƒ©ãƒ³ãƒ€ãƒ ã«æ·»ãˆå­—ã‚’å…¥ã‚Œã‚‹é–¢æ•° ä½œæˆï¼šæ— æ‹“æµ·
 {
 
-int a;//ƒ‰ƒ“ƒ_ƒ€‚È’l
-int b=60;//c‚è—v‘f”
-int i;//ƒ‹[ƒv—p“Y‚¦š
+int a;//ãƒ©ãƒ³ãƒ€ãƒ ãªå€¤
+int b=60;//æ®‹ã‚Šè¦ç´ æ•°
+int i;//ãƒ«ãƒ¼ãƒ—ç”¨æ·»ãˆå­—
 
-	//Œ»İ‚ÌŠl“¾
+	//ç¾åœ¨æ™‚åˆ»ã®ç²å¾—
 	srand(time(NULL));
 
 	for(i=0;i<=59;i++){
 
-		//ƒ‰ƒ“ƒ_ƒ€‚È’l‚ğa‚ÉŠi”[
+		//ãƒ©ãƒ³ãƒ€ãƒ ãªå€¤ã‚’aã«æ ¼ç´
 		a=rand();
 
-		//ƒ‰ƒ“ƒ_ƒ€‚È’l‚ğc‚è—v‘f”‚ÅŠ„‚é
+		//ãƒ©ãƒ³ãƒ€ãƒ ãªå€¤ã‚’æ®‹ã‚Šè¦ç´ æ•°ã§å‰²ã‚‹
 		a%=b;
 
-		//ƒ‰ƒ“ƒ_ƒ€‚É‘I‚Î‚ê‚½“Y‚¦š‚ğDeck‚ÉŠi”[
+		//ãƒ©ãƒ³ãƒ€ãƒ ã«é¸ã°ã‚ŒãŸæ·»ãˆå­—ã‚’Deckã«æ ¼ç´
 		Deck[i]=soezi[a];
 
-		//g‚Á‚½“Y‚¦š‚Éˆê”ÔŒã‚ë‚Ì“Y‚¦š‚ğŠi”[
+		//ä½¿ã£ãŸæ·»ãˆå­—ã«ä¸€ç•ªå¾Œã‚ã®æ·»ãˆå­—ã‚’æ ¼ç´
 		soezi[a]=soezi[b-1];
 
-		//c‚è—v‘f”‚ğ1Œ¸‚ç‚·
+		//æ®‹ã‚Šè¦ç´ æ•°ã‚’1æ¸›ã‚‰ã™
 		b--;
 
 	}
 
 }
 
-void distribute(void)//‰ŠúèD”z•zŠÖ” ì¬F—Ñ ‘ñŠC
+void distribute(void)//åˆæœŸæ‰‹æœ­é…å¸ƒé–¢æ•° ä½œæˆï¼šæ— æ‹“æµ·
 {
 
-int i;//ƒ‹[ƒv—p“Y‚¦š
+int i;//ãƒ«ãƒ¼ãƒ—ç”¨æ·»ãˆå­—
 
-	//ƒfƒbƒL‚©‚ç5–‡ƒvƒŒƒCƒ„[‚É”z•z
+	//ãƒ‡ãƒƒã‚­ã‹ã‚‰5æšãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«é…å¸ƒ
 	for(;HandC<=4;HandC++,DeckC--){
 		PlayerHand[HandC]=Deck[DeckC-1];
 	}
-//----------------------------------------------------------------------ŒÃ’r’Ç‰Á
+//----------------------------------------------------------------------å¤æ± è¿½åŠ 
 	for ( ; AI_Date1[1] < 5 ; AI_Date1[1]++, DeckC-- ) {
 		AI1_Hand[AI_Date1[1]] = Deck[DeckC-1];
 	}
@@ -1120,14 +1120,14 @@ int i;//ƒ‹[ƒv—p“Y‚¦š
 //------------------------------------------------------------------------------
 }
 
-void Hand_Reset(){//èDƒŠƒZƒbƒgŠÖ”,»ìÒFŒÃ’r—Š‹H
+void Hand_Reset(){//æ‰‹æœ­ãƒªã‚»ãƒƒãƒˆé–¢æ•°,è£½ä½œè€…ï¼šå¤æ± é ¼ç¨€
 	int i;
 
-	if ( HRC < 3 ) {//ƒŠƒZƒbƒgƒJƒEƒ“ƒg‚ª3–¢–‚È‚çˆ—‚ğ‚·‚é
+	if ( HRC < 3 ) {//ãƒªã‚»ãƒƒãƒˆã‚«ã‚¦ãƒ³ãƒˆãŒ3æœªæº€ãªã‚‰å‡¦ç†ã‚’ã™ã‚‹
 	         	ChangeVolumeSoundMem( volumeX, SEkakutei ) ;
 			PlaySoundMem(SEkakutei,DX_PLAYTYPE_BACK);
-		HRC += 1;//ƒJƒEƒ“ƒg‚ğ+1
-		HandC += 1;//èD–‡”‚ğ+1
+		HRC += 1;//ã‚«ã‚¦ãƒ³ãƒˆã‚’+1
+		HandC += 1;//æ‰‹æœ­æšæ•°ã‚’+1
 
 		for ( i = HandC - 1 ; i >= 0 ; i-- ) {
 			if ( DeckC > 0 ) {
@@ -1136,14 +1136,14 @@ void Hand_Reset(){//èDƒŠƒZƒbƒgŠÖ”,»ìÒFŒÃ’r—Š‹H
 			}
 		}
 	}
-	else {//Šù‚É3‰ñƒŠƒZƒbƒg‚µ‚Ä‚¢‚½‚ç
+	else {//æ—¢ã«3å›ãƒªã‚»ãƒƒãƒˆã—ã¦ã„ãŸã‚‰
          	ChangeVolumeSoundMem( volumeX, SEbuu ) ;
 		PlaySoundMem(SEbuu,DX_PLAYTYPE_BACK);
-		//u‚±‚êˆÈãƒŠƒZƒbƒg‚Å‚«‚Ü‚¹‚ñv•\¦
+		//ã€Œã“ã‚Œä»¥ä¸Šãƒªã‚»ãƒƒãƒˆã§ãã¾ã›ã‚“ã€è¡¨ç¤º
 	}
 }
 
-//ƒfƒbƒL‚ª–³‚­‚È‚Á‚½‚ç•‰‚¯
+//ãƒ‡ãƒƒã‚­ãŒç„¡ããªã£ãŸã‚‰è² ã‘
 void Deck_Def(){
 	int i;
 	if(DeckC<=0){
@@ -1152,12 +1152,12 @@ void Deck_Def(){
 		}
 	}
 }
-//ƒnƒ“ƒh‚ª–³‚­‚È‚Á‚½‚çŸ‚¿
+//ãƒãƒ³ãƒ‰ãŒç„¡ããªã£ãŸã‚‰å‹ã¡
 void Hand_Win(){
 	if(HandC==0){
 		Win[0]=1;
 	}
-//----------------------------------------------------------------------ŒÃ’r’Ç‰Á
+//----------------------------------------------------------------------å¤æ± è¿½åŠ 
 	if ( AI_Date1[1] == 0 ) {
 		Win[1] = 1;
 		AI_Date1[3] = 1;
@@ -1173,33 +1173,33 @@ void Hand_Win(){
 //------------------------------------------------------------------------------
 }
 
-void WCO_DB_Check(){//DB’TõŠÖ”,»ìÒFŒÃ’r—Š‹H
-	char Get_DB[32];//DB‚©‚çó‚¯æ‚Á‚½•¶š—ñŠi”[”z—ñ
+void WCO_DB_Check(){//DBæ¢ç´¢é–¢æ•°,è£½ä½œè€…ï¼šå¤æ± é ¼ç¨€
+	char Get_DB[32];//DBã‹ã‚‰å—ã‘å–ã£ãŸæ–‡å­—åˆ—æ ¼ç´é…åˆ—
 	FILE *db;
 	db = fopen("WCO_DB.txt", "r");
-	DB_Check_Flag=0;//ƒtƒ‰ƒO‰Šú‰»
-	if ( NULL == db ) {//ƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½‚ç
-	//	printf("!ERROR!\nƒtƒ@ƒCƒ‹‚ªŠJ‚¯‚Ü‚¹‚ñ‚Å‚µ‚½\n");
+	DB_Check_Flag=0;//ãƒ•ãƒ©ã‚°åˆæœŸåŒ–
+	if ( NULL == db ) {//ãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸã‚‰
+	//	printf("!ERROR!\nãƒ•ã‚¡ã‚¤ãƒ«ãŒé–‹ã‘ã¾ã›ã‚“ã§ã—ãŸ\n");
 	}
-	else {//ƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚Á‚½‚ç
-		while ( fgets(Get_DB, 32, db) != NULL ) {//“ü—Í‚³‚ê‚½•¶š—ñ‚Æˆê’v‚·‚é•¶š—ñ‚ªDB‚ÉŒ©‚Â‚©‚é‚Ü‚Åƒ‹[ƒv
-			Get_DB[strlen(Get_DB) - 1] = '\0';//‰üsƒR[ƒh‚ğNULL‚É•ÏŠ·
-			if ( strcmp(Card,Get_DB) == 0 ) {//“ü—Í‚³‚ê‚½•¶š—ñ‚Æˆê’v‚·‚é•¶š—ñ‚ªŒ©‚Â‚©‚Á‚½‚ç
-				DB_Check_Flag = 1;//Œ©‚Â‚©‚Á‚½ƒtƒ‰ƒO‚ğ•Ô‚·
+	else {//ãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã£ãŸã‚‰
+		while ( fgets(Get_DB, 32, db) != NULL ) {//å…¥åŠ›ã•ã‚ŒãŸæ–‡å­—åˆ—ã¨ä¸€è‡´ã™ã‚‹æ–‡å­—åˆ—ãŒDBã«è¦‹ã¤ã‹ã‚‹ã¾ã§ãƒ«ãƒ¼ãƒ—
+			Get_DB[strlen(Get_DB) - 1] = '\0';//æ”¹è¡Œã‚³ãƒ¼ãƒ‰ã‚’NULLã«å¤‰æ›
+			if ( strcmp(Card,Get_DB) == 0 ) {//å…¥åŠ›ã•ã‚ŒãŸæ–‡å­—åˆ—ã¨ä¸€è‡´ã™ã‚‹æ–‡å­—åˆ—ãŒè¦‹ã¤ã‹ã£ãŸã‚‰
+				DB_Check_Flag = 1;//è¦‹ã¤ã‹ã£ãŸãƒ•ãƒ©ã‚°ã‚’è¿”ã™
 				break;
 			}
 		}
 	}
-	if ( strcmp(Get_DB, "‚İ‚Ë‚µ‚½") == 0 ) {
+	if ( strcmp(Get_DB, "ã¿ã­ã—ãŸ") == 0 ) {
 		Win[0] = 1;
 	}
 	fclose(db);
 }
 
 void hantei(){
-	int x;//ƒJ[ƒh‚Ì“Y‚¦š
-	int y = 0;//ƒ‰ƒXƒg‚Ì•¶š‚ğ’Tõ‚·‚éÛ‚Ég—p
-	//“Y‚¦š‘ã“ü
+	int x;//ã‚«ãƒ¼ãƒ‰ã®æ·»ãˆå­—
+	int y = 0;//ãƒ©ã‚¹ãƒˆã®æ–‡å­—ã‚’æ¢ç´¢ã™ã‚‹éš›ã«ä½¿ç”¨
+	//æ·»ãˆå­—ä»£å…¥
 	x = PlayerHand[CardSelect];
 
 	int flag=0;
@@ -1207,16 +1207,16 @@ void hantei(){
 	int Count=0;
 
 
-		//V—v‘f(“ü—Í‚³‚ê‚½ˆê”ÔÅ‰‚Ì•¶š‚É‘÷‰¹A”¼‘÷‰¹‚ª•t‚¢‚Ä‚¢‚ê‚Î‚»‚ê‚ğŠO‚·)
+		//æ–°è¦ç´ (å…¥åŠ›ã•ã‚ŒãŸä¸€ç•ªæœ€åˆã®æ–‡å­—ã«æ¿éŸ³ã€åŠæ¿éŸ³ãŒä»˜ã„ã¦ã„ã‚Œã°ãã‚Œã‚’å¤–ã™)
 	for(Count = 0 ; Count < 50 ; Count++){
 		if(Card[1] == CardCheck2[Count]){
 			Card[1] = CardCheck3[Count];
 		}
 	}
 
-        //DB’Tõ¬Œ÷‚µ‚½‚ç
+        //DBæ¢ç´¢æˆåŠŸã—ãŸã‚‰
 	if(DB_Check_Flag == 1){
-                //èDˆê–‡A‚S•¶šˆÈã
+                //æ‰‹æœ­ä¸€æšæ™‚ã€ï¼”æ–‡å­—ä»¥ä¸Š
 		if(HandC == 1){
 			if(Card[6] != NULL){
 				flag = 1;
@@ -1225,7 +1225,7 @@ void hantei(){
 				PlaySoundMem(SEbuu,DX_PLAYTYPE_BACK);
 			}
 		}
-                //èD“ñ–‡ˆÈãA‚R•¶šˆÈã
+                //æ‰‹æœ­äºŒæšä»¥ä¸Šã€ï¼“æ–‡å­—ä»¥ä¸Š
 		else if(HandC >= 2){
 			if(Card[4] != NULL){
 				flag = 1;
@@ -1240,351 +1240,351 @@ void hantei(){
 	}
 	if(flag == 1){
 
-		for(y = 0 ; Card[y] != '\0' ; y++){}//ÅŒã‚Ì•¶š‚ğ’²‚×‚é
+		for(y = 0 ; Card[y] != '\0' ; y++){}//æœ€å¾Œã®æ–‡å­—ã‚’èª¿ã¹ã‚‹
 
-		if(x == 0){//‚ 
-	    		if(Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1] && TopCard[0] == Card[0] && TopCard[1] == Card[1]){//‘I‘ğ‚µ‚½èD‚ÆÅŒã‚Ì•¶š‚ªˆê’v‚µ‚Ä‚¢‚é‚©”»’è & ”Õ–Ê‚Ì•¶š‚Æ‹Lq‚µ‚½Å‰‚Ì•¶š‚ªˆê‚©”»’è
+		if(x == 0){//ã‚
+	    		if(Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1] && TopCard[0] == Card[0] && TopCard[1] == Card[1]){//é¸æŠã—ãŸæ‰‹æœ­ã¨æœ€å¾Œã®æ–‡å­—ãŒä¸€è‡´ã—ã¦ã„ã‚‹ã‹åˆ¤å®š & ç›¤é¢ã®æ–‡å­—ã¨è¨˜è¿°ã—ãŸæœ€åˆã®æ–‡å­—ãŒä¸€ç·’ã‹åˆ¤å®š
 				updateflag = 1;
 			}
 		}
 
-		if(x == 1){//‚¢
+		if(x == 1){//ã„
 	    		if(Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1] && TopCard[0] == Card[0] &&  TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 2){//‚¤
+		if(x == 2){//ã†
 	  		if(Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1] && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 3){//‚¦
+		if(x == 3){//ãˆ
 	    		if(Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1] && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 4){//‚¨
+		if(x == 4){//ãŠ
 	   		if(Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1] && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 5){//‚©
+		if(x == 5){//ã‹
 	    		if(((Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1]) || (Card[y-2] == CardCheck2[0] && Card[y-1] == CardCheck2[1])) && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 6){//‚«
+		if(x == 6){//ã
 	    		if(((Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1]) || (Card[y-2] == CardCheck2[2] && Card[y-1] == CardCheck2[3])) && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 7){//‚­
+		if(x == 7){//ã
 	    		if(((Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1]) || (Card[y-2] == CardCheck2[4] && Card[y-1] == CardCheck2[5])) && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 8){//‚¯
+		if(x == 8){//ã‘
 	    		if(((Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1]) || (Card[y-2] == CardCheck2[6] && Card[y-1] == CardCheck2[7])) && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 9){//‚±
+		if(x == 9){//ã“
 	    		if(((Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1]) || (Card[y-2] == CardCheck2[8] && Card[y-1] == CardCheck2[9])) && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 10){//‚³
+		if(x == 10){//ã•
 	   		if(((Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1]) || (Card[y-2] == CardCheck2[10] && Card[y-1] == CardCheck2[11])) && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 11){//‚µ
+		if(x == 11){//ã—
 	    		if(((Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1]) || (Card[y-2] == CardCheck2[12] && Card[y-1] == CardCheck2[13])) && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 12){//‚·
+		if(x == 12){//ã™
 	    		if(((Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1]) || (Card[y-2] == CardCheck2[14] && Card[y-1] == CardCheck2[15])) && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 13){//‚¹
+		if(x == 13){//ã›
 	    		if(((Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1]) || (Card[y-2] == CardCheck2[16] && Card[y-1] == CardCheck2[17])) && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 14){//‚»
+		if(x == 14){//ã
 	    		if(((Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1]) || (Card[y-2] == CardCheck2[18] && Card[y-1] == CardCheck2[19])) && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 15){//‚½
+		if(x == 15){//ãŸ
 	    		if(((Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1]) || (Card[y-2] == CardCheck2[20] && Card[y-1] == CardCheck2[21])) && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 16){//‚¿
+		if(x == 16){//ã¡
 	    		if(((Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1]) || (Card[y-2] == CardCheck2[22] && Card[y-1] == CardCheck2[23])) && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 17){//‚Â
+		if(x == 17){//ã¤
 	    		if(((Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1]) || (Card[y-2] == CardCheck2[24] && Card[y-1] == CardCheck2[25])) && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 18){//‚Ä
+		if(x == 18){//ã¦
 	    		if(((Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1]) || (Card[y-2] == CardCheck2[26] && Card[y-1] == CardCheck2[27])) && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 19){//‚Æ
+		if(x == 19){//ã¨
 	    		if(((Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1]) || (Card[y-2] == CardCheck2[28] && Card[y-1] == CardCheck2[29])) && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 20){//‚È
+		if(x == 20){//ãª
 	    		if(Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1] && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 21){//‚É
+		if(x == 21){//ã«
 	    		if(Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1]  && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 22){//‚Ê
+		if(x == 22){//ã¬
 	    		if(Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1] && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 23){//‚Ë
+		if(x == 23){//ã­
 	   		if(Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1] && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 24){//‚Ì
+		if(x == 24){//ã®
 	    		if(Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1] && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 25){//‚Í
+		if(x == 25){//ã¯
 	     		if(((Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1]) || (Card[y-1] == CardCheck2[31] && Card[y-2] == CardCheck2[30] ) || (Card[y-1] == CardCheck2[41] && Card[y-2] == CardCheck2[40])) && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 26){//‚Ğ
+		if(x == 26){//ã²
 	    		if(((Card[y-2] == CardCheck1[x*2] &&  Card[y-1] == CardCheck1[x*2+1]) || (Card[y-1] == CardCheck2[33] && Card[y-2] == CardCheck2[32] ) || (Card[y-1] == CardCheck2[43] && Card[y-2] == CardCheck2[42])) && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 27){//‚Ó
+		if(x == 27){//ãµ
 	    		if(((Card[y-2] == CardCheck1[x*2] &&  Card[y-1] == CardCheck1[x*2+1]) || (Card[y-1] == CardCheck2[35] && Card[y-2] == CardCheck2[34] ) || (Card[y-1] == CardCheck2[45] && Card[y-2] == CardCheck2[44])) && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 28){//‚Ö
+		if(x == 28){//ã¸
 	    		if(((Card[y-2] == CardCheck1[x*2] &&  Card[y-1] == CardCheck1[x*2+1]) || (Card[y-1] == CardCheck2[37] && Card[y-2] == CardCheck2[36] ) || (Card[y-1] == CardCheck2[47] && Card[y-2] == CardCheck2[46])) && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 29){//‚Ù
+		if(x == 29){//ã»
 			if(((Card[y-2] == CardCheck1[x*2] &&  Card[y-1] == CardCheck1[x*2+1]) || (Card[y-1] == CardCheck2[39] && Card[y-2] == CardCheck2[38] ) || (Card[y-1] == CardCheck2[49] && Card[y-2] == CardCheck2[48])) && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 30){//‚Ü
+		if(x == 30){//ã¾
 	    		if(Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1] && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 31){//‚İ
+		if(x == 31){//ã¿
 	    		if(Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1] && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 32){//‚Ş
+		if(x == 32){//ã‚€
 	    		if(Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1] && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 33){//‚ß
+		if(x == 33){//ã‚
 	   		if(Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1] && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 34){//‚à
+		if(x == 34){//ã‚‚
 	    		if(Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1] && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 35){//‚â
+		if(x == 35){//ã‚„
 	    		if(Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1] && TopCard[0] == Card[0]  && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 36){//‚ä
+		if(x == 36){//ã‚†
 	    		if(Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1] && TopCard[0] == Card[0]  && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 37){//‚æ
+		if(x == 37){//ã‚ˆ
 	    		if(Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1] && TopCard[0] == Card[0]  && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 38){//‚ç
+		if(x == 38){//ã‚‰
 	    		if(Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1] && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 39){//‚è
+		if(x == 39){//ã‚Š
 			if(Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1] && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 40){//‚é
+		if(x == 40){//ã‚‹
 			if(Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1] && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 41){//‚ê
+		if(x == 41){//ã‚Œ
 			if(Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1] && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 42){//‚ë
+		if(x == 42){//ã‚
 			if(Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1] && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 43 || x == 44){//‚í
+		if(x == 43 || x == 44){//ã‚
 			if(Card[y-2] == CardCheck1[x*2] && Card[y-1] == CardCheck1[x*2+1] && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 45){//‚ ‚¢‚¤‚¦‚¨
+		if(x == 45){//ã‚ã„ã†ãˆãŠ
 	    		if(((Card[y-1] == CardCheck1[1] && Card[y-2] == CardCheck1[0]) || (Card[y-1] == CardCheck1[3] && Card[y-2] == CardCheck1[2]) || (Card[y-1] == CardCheck1[5] && Card[y-2] == CardCheck1[4]) || (Card[y-1] == CardCheck1[7] && Card[y-2] == CardCheck1[6]) || (Card[y-1] == CardCheck1[9] && Card[y-2] == CardCheck1[8]) ) && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 46){//‚©‚«‚­‚¯‚±
+		if(x == 46){//ã‹ããã‘ã“
 	    		if(((Card[y-1] == CardCheck1[11] && Card[y-2] == CardCheck1[10]) || (Card[y-1] == CardCheck1[13] && Card[y-2] == CardCheck1[12])|| (Card[y-1] == CardCheck1[15] && Card[y-2] == CardCheck1[14]) || (Card[y-1] == CardCheck1[17] && Card[y-2] == CardCheck1[16]) || (Card[y-1] == CardCheck1[19] && Card[y-2] == CardCheck1[18]) || (Card[y-1] == CardCheck2[1] || Card[y-2] == CardCheck2[0]) || (Card[y-1] == CardCheck2[3] || Card[y-2] == CardCheck2[2]) || (Card[y-1] == CardCheck2[5] || Card[y-2] == CardCheck2[4]) || (Card[y-1] == CardCheck2[7] || Card[y-2] == CardCheck2[6]) || (Card[y-1] == CardCheck2[9] || Card[y-2] == CardCheck2[8]) ) && TopCard[0] == Card[0] &&  TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 47){//‚³‚µ‚·‚¹‚»
+		if(x == 47){//ã•ã—ã™ã›ã
 	    		if(((Card[y-1] == CardCheck1[21] && Card[y-2] == CardCheck1[20]) || (Card[y-1] == CardCheck1[23] && Card[y-2] == CardCheck1[22])|| (Card[y-1] == CardCheck1[25] && Card[y-2] == CardCheck1[24]) || (Card[y-1] == CardCheck1[27] && Card[y-2] == CardCheck1[26]) || (Card[y-1] == CardCheck1[29] && Card[y-2] == CardCheck1[28]) || (Card[y-1] == CardCheck2[11] || Card[y-2] == CardCheck2[10]) || (Card[y-1] == CardCheck2[13] || Card[y-2] == CardCheck2[12]) || (Card[y-1] == CardCheck2[15] || Card[y-2] == CardCheck2[14]) || (Card[y-1] == CardCheck2[17] || Card[y-2] == CardCheck2[16]) || (Card[y-1] == CardCheck2[19] || Card[y-2] == CardCheck2[18]) ) && TopCard[0] == Card[0] &&  TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 48){//‚½‚¿‚Â‚Ä‚Æ
+		if(x == 48){//ãŸã¡ã¤ã¦ã¨
 			if(((Card[y-1] == CardCheck1[31] && Card[y-2] == CardCheck1[30]) || (Card[y-1] == CardCheck1[33] && Card[y-2] == CardCheck1[32])|| (Card[y-1] == CardCheck1[35] && Card[y-2] == CardCheck1[34]) || (Card[y-1] == CardCheck1[37] && Card[y-2] == CardCheck1[36]) || (Card[y-1] == CardCheck1[39] && Card[y-2] == CardCheck1[38]) || (Card[y-1] == CardCheck2[21] || Card[y-2] == CardCheck2[20]) || (Card[y-1] == CardCheck2[23] || Card[y-2] == CardCheck2[22]) || (Card[y-1] == CardCheck2[25] || Card[y-2] == CardCheck2[24]) || (Card[y-1] == CardCheck2[27] || Card[y-2] == CardCheck2[26]) || (Card[y-1] == CardCheck2[29] || Card[y-2] == CardCheck2[28]) ) && TopCard[0] == Card[0] &&  TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 49){//‚È‚É‚Ê‚Ë‚Ì
+		if(x == 49){//ãªã«ã¬ã­ã®
 			if(((Card[y-1] == CardCheck1[41] && Card[y-2] == CardCheck1[40]) || (Card[y-1] == CardCheck1[43] && Card[y-2] == CardCheck1[42]) || (Card[y-1] == CardCheck1[45] && Card[y-2] == CardCheck1[44]) || (Card[y-1] == CardCheck1[47] && Card[y-2] == CardCheck1[46]) || (Card[y-1] == CardCheck1[49] && Card[y-2] == CardCheck1[48]) ) && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 50){//‚Í‚Ğ‚Ó‚Ö‚Ù
+		if(x == 50){//ã¯ã²ãµã¸ã»
 			if(((Card[y-1] == CardCheck1[51] && Card[y-2]==CardCheck1[50]) || (Card[y-1] == CardCheck1[53] && Card[y-2] == CardCheck1[52]) || (Card[y-1] == CardCheck1[55] && Card[y-2] == CardCheck1[54]) || (Card[y-1] == CardCheck1[57] && Card[y-2] == CardCheck1[56]) || (Card[y-1] == CardCheck1[59] && Card[y-2] == CardCheck1[58])  || (Card[y-1] == CardCheck2[31] || Card[y-2] == CardCheck2[30]) || (Card[y-1] == CardCheck2[33] || Card[y-2] == CardCheck2[32]) || (Card[y-1] == CardCheck2[35] || Card[y-2] == CardCheck2[34]) || (Card[y-1] == CardCheck2[37] || Card[y-2] == CardCheck2[36]) || (Card[y-1] == CardCheck2[39] || Card[y-2] == CardCheck2[38]) || (Card[y-1] ==CardCheck2[41]||Card[y-2] == CardCheck2[40])||(Card[y-1]==CardCheck2[43]||Card[y-2]==CardCheck2[42])||(Card[y-1]==CardCheck2[45]||Card[y-2]==CardCheck2[44])||(Card[y-1]==CardCheck2[47]||Card[y-2]==CardCheck2[46])||(Card[y-1]==CardCheck2[49]||Card[y-2]==CardCheck2[48]))&&TopCard[0]==Card[0] &&  TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 51){//‚Ü‚İ‚Ş‚ß‚à
+		if(x == 51){//ã¾ã¿ã‚€ã‚ã‚‚
 			if(((Card[y-1] == CardCheck1[61] && Card[y-2] == CardCheck1[60]) || (Card[y-1] == CardCheck1[63] && Card[y-2] == CardCheck1[62]) || (Card[y-1] == CardCheck1[65] && Card[y-2] == CardCheck1[64]) || (Card[y-1] == CardCheck1[67] && Card[y-2] == CardCheck1[66]) || (Card[y-1] == CardCheck1[69] && Card[y-2] == CardCheck1[68]) ) && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 52){//‚â‚ä‚æ
+		if(x == 52){//ã‚„ã‚†ã‚ˆ
 			if(((Card[y-1] == CardCheck1[71] && Card[y-2] == CardCheck1[70]) || (Card[y-1] == CardCheck1[73] && Card[y-2] == CardCheck1[72]) || (Card[y-1] == CardCheck1[75] && Card[y-2] == CardCheck1[74])) && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 53){//‚ç‚è‚é‚ê‚ë
+		if(x == 53){//ã‚‰ã‚Šã‚‹ã‚Œã‚
 			if(((Card[y-1] == CardCheck1[77] && Card[y-2] == CardCheck1[76]) || (Card[y-1] == CardCheck1[79] && Card[y-2] == CardCheck1[78]) || (Card[y-1] == CardCheck1[81] && Card[y-2] == CardCheck1[80]) || (Card[y-1] == CardCheck1[83] && Card[y-2] == CardCheck1[82]) || (Card[y-1] == CardCheck1[85] && Card[y-2] == CardCheck1[84]) ) && TopCard[0] == Card[0] && TopCard[1] == Card[1]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 54 || x == 55){//‚T•¶š‚Ì‚İ
+		if(x == 54 || x == 55){//ï¼•æ–‡å­—ã®ã¿
 	    		if(Card[8]==CardCheck1[0] && Card[10]=='\0' && TopCard[1] == Card[1] && TopCard[0] == Card[0]){
 				updateflag = 1;
 			}
 		}
 
-		if(x == 56 || x == 57){//6•¶š‚Ì‚İ
+		if(x == 56 || x == 57){//6æ–‡å­—ã®ã¿
 	    		if(Card[10]==CardCheck1[0] && Card[12]=='\0' && TopCard[1] == Card[1] && TopCard[0] == Card[0]){
 				updateflag = 1;
 			}
 	    	}
 
-		if(x == 58 || x == 59){//7•¶šˆÈã
+		if(x == 58 || x == 59){//7æ–‡å­—ä»¥ä¸Š
 			if(Card[12]==CardCheck1[0] && TopCard[1] == Card[1] && TopCard[0] == Card[0]){
 				updateflag = 1;
 			}
 	   	}
 
-		//ƒJ[ƒh’Ê‚è‚¾‚Á‚½‚ç
+		//ã‚«ãƒ¼ãƒ‰é€šã‚Šã ã£ãŸã‚‰
 		if(updateflag == 1){
 	         	ChangeVolumeSoundMem( volumeX, SEkakutei ) ;
 			PlaySoundMem(SEkakutei,DX_PLAYTYPE_BACK);
 
-			TopCard[0] = Card[y-2];//”Õ–Ê‚Ì•¶šXV
-			TopCard[1] = Card[y-1];//”Õ–Ê‚Ì•¶šXV
+			TopCard[0] = Card[y-2];//ç›¤é¢ã®æ–‡å­—æ›´æ–°
+			TopCard[1] = Card[y-1];//ç›¤é¢ã®æ–‡å­—æ›´æ–°
 
 			for(Count = 0 ; Count < 50 ; Count++){
 				if(TopCard[1] == CardCheck2[Count]){
@@ -1598,31 +1598,31 @@ void hantei(){
 
 
 
-			//g—p‚µ‚½èDÌ‚ÄA‹l‚ß‚é
+			//ä½¿ç”¨ã—ãŸæ‰‹æœ­æ¨ã¦ã€è©°ã‚ã‚‹
 			for(int count = CardSelect; PlayerHand[count] != -1; count++){
 				PlayerHand[count] = PlayerHand[count+1];
 			}
-			HandC -= 1;//èD-1
+			HandC -= 1;//æ‰‹æœ­-1
 		}
 	}
 }
-void FpsTimeFanction(){//»ìÒFŒÃ’r—Š‹H
+void FpsTimeFanction(){//è£½ä½œè€…ï¼šå¤æ± é ¼ç¨€
 	int TookTime, WaitTime;
         if(Fpsc == 0)
-                FpsTime[0]=GetNowCount();               //1ü–Ú‚ÌŠÔæ“¾
+                FpsTime[0]=GetNowCount();               //1å‘¨ç›®ã®æ™‚é–“å–å¾—
         if(Fpsc == 29){
-                FpsTime[1]=GetNowCount();               //30ü–Ú‚ÌŠÔæ“¾
-                Fps = 1000.0f / ((FpsTime[1] - FpsTime[0]) / 30.0f);//‘ª’è‚µ‚½’l‚©‚çfps‚ğŒvZ
-                Fpsc = 0;//ƒJƒEƒ“ƒg‚ğ‰Šú‰»
+                FpsTime[1]=GetNowCount();               //30å‘¨ç›®ã®æ™‚é–“å–å¾—
+                Fps = 1000.0f / ((FpsTime[1] - FpsTime[0]) / 30.0f);//æ¸¬å®šã—ãŸå€¤ã‹ã‚‰fpsã‚’è¨ˆç®—
+                Fpsc = 0;//ã‚«ã‚¦ãƒ³ãƒˆã‚’åˆæœŸåŒ–
         }
         else
-                Fpsc++;//Œ»İ‰½ü–Ú‚©ƒJƒEƒ“ƒg
+                Fpsc++;//ç¾åœ¨ä½•å‘¨ç›®ã‹ã‚«ã‚¦ãƒ³ãƒˆ
         if(Fps != 0)
-                DrawFormatString(1180,10,GetColor(0,255,0),"FPS %.1f",Fps); //fps‚ğ•\¦
+                DrawFormatString(1180,10,GetColor(0,255,0),"FPS %.1f",Fps); //fpsã‚’è¡¨ç¤º
 
 	TookTime = GetNowCount() - FpsTime[0];
 	WaitTime = Fpsc * 1000 / 60 - TookTime;
 	if ( WaitTime > 0 ) {
-		WaitTimer(WaitTime);//w’è‚µ‚½FPS‚É‚È‚é‚Ü‚Å‘Ò‹@
+		WaitTimer(WaitTime);//æŒ‡å®šã—ãŸFPSã«ãªã‚‹ã¾ã§å¾…æ©Ÿ
 	}
 }
